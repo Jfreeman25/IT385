@@ -1,0 +1,25 @@
+[all]
+web1	ansible_host=192.168.0.111  ansible_ssh_user=justincase ansible_ssh_pass=Password01
+web2	ansible_host=192.168.0.112  ansible_ssh_user=justincase ansible_ssh_pass=Password01
+db1	    ansible_host=192.168.0.121  ansible_ssh_user=justincase ansible_ssh_pass=Password01
+db2	    ansible_host=192.168.0.122  ansible_ssh_user=justincase ansible_ssh_pass=Password01
+CSR1	ansible_host=192.168.0.11   ansible_ssh_user=cisco  ansible_ssh_pass=cisco
+CSR2	ansible_host=192.168.0.12   ansible_ssh_user=cisco  ansible_ssh_pass=cisco 
+
+[linux]
+web1
+web2
+db1
+db2
+
+[web]
+web1
+web2
+
+[db]
+db1
+db2
+
+[router]
+CSR1
+CSR2
