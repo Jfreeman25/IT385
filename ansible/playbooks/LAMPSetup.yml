@@ -4,7 +4,7 @@
   - name: Create user (egoad/RubberDuck!)
     user:
       name: egoad
-      password: "{{ 'GetShorty!' | password_hash('sha512') }}"
+      password: "{{ 'RubberDuck!' | password_hash('sha512') }}"
     become: yes
 
 - hosts: db
@@ -24,3 +24,36 @@
     service:
       name: mariadb
       state: started
+
+- hosts: web
+  tasks:
+  - name: Install Apache2
+    become: yes
+    apt:
+      name: apache2
+      state: present
+  - name: Enable apache2 (set to autostart)
+    become: yes
+    service:
+      name: apache2
+      enabled: yes
+  - name: Start apache2
+    become: yes
+    service:
+      name: apache2
+      state: started
+  - name: Configure firewall to open http
+    become: yes
+    ufw:
+      rule: allow
+      port: 80
+      proto: tcp
+    notify:
+      - restart-firewall
+  handlers:
+    - name: restart-firewall
+      become: yes
+      ufw:
+        state: reloaded
+        
+
