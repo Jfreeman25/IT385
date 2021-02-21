@@ -1,0 +1,7 @@
+---
+- hosts: linux
+  tasks:
+  - name: Create user (egoad/RubberDuck!)
+    user:
+      name: egoad
+      password: RubberDuck!
