@@ -1,0 +1,26 @@
+---
+- hosts: linux
+  tasks:
+  - name: Create user (egoad/RubberDuck!)
+    user:
+      name: egoad
+      password: "{{ 'GetShorty!' | password_hash('sha512') }}"
+    become: yes
+
+- hosts: db
+  tasks:
+  - name: Install MariaDB
+    become: yes
+    apt:
+      name: mariadb-server
+      state: present
+  - name: Enable mariaDB (set to autostart)
+    become: yes
+    service:
+      name: mariadb
+      enabled: yes
+  - name: Start mariaDB 
+    become: yes
+    service:
+      name: mariadb
+      state: started
