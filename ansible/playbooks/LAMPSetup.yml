@@ -45,6 +45,20 @@
     service:
       name: apache2
       state: started
+#  - name: clone website from github
+#    become: yes
+#    git:
+#      repo: 'https://github.com/egoad/duckfarmdemo.git'
+#      archive: /duckfarmdemo/duckfarmstatic.zip
+#      dest: /var/www/html
+  - name: copy files to web servers
+    become: yes
+    copy:
+      src: /home/justincase/it385/website/duckfarmstatic/
+      dest: /var/www/html
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
   - name: Configure firewall to open http
     become: yes
     ufw:

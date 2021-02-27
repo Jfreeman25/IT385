@@ -1,0 +1,29 @@
+---
+- hosts: db
+  tasks:
+  - name: Uninstall MariaDB
+    become: yes
+    apt:
+      name: mariadb-server
+      state: absent
+
+- hosts: web
+  tasks:
+  - name: Uninstall Apache2
+    become: yes
+    apt:
+      name: apache2
+      state: absent
+  - name: Close firewall to htttp
+    become: yes
+    ufw:
+      rule: deny
+      port: 80
+      proto: tcp
+    notify:
+      - restart-firewall
+  handlers:
+    - name: restart-firewall
+      become: yes
+      ufw:
+        state: reloaded
