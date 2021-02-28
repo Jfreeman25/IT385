@@ -1,0 +1,94 @@
+---
+- hosts: router
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Initial configs
+    ios_config:
+      lines: 
+        - hostname {{ inventory_hostname }}
+        - no ip domain-lookup
+        - login block-for 180 attempts 4 within 120
+        - security passwords min-length 10
+        - service password-encryption
+        - line vty 0 15
+        - exec-timeout 5 0
+  - name: Set banner
+    ios_banner:
+      banner: motd
+      text: "Warning: Unauthorized access to this device is prohibited!"
+      state: present
+        
+- hosts: CSR1
+  connection: local
+  tasks:
+  - name: Configure interfaces on CSR1
+    ios_config:
+      lines:
+        - int g1
+        - ip ospf dead-interval 60
+        - ip ospf hello-interval 15
+        - ip ospf priority 255
+        - int g2
+        - ip add 192.168.51.1 255.255.255.0
+        - no shut
+        - int g3
+        - ip add 192.168.52.1 255.255.255.0
+  - name: Set g3 to up
+    ios_interface:
+      name: GigabitEthernet3
+      enabled: True
+
+- hosts: CSR2
+  connection: local
+  tasks:
+  - name: Configure interfaces on CSR2
+    ios_config:
+      lines:
+        - int g1
+        - ip ospf dead-interval 60
+        - ip ospf hello-interval 15
+        - ip ospf priority 0
+        - int g2
+        - ip add 192.168.101.1 255.255.255.0
+        - no shut
+        - int g3
+        - ip add 192.168.102.1 255.255.255.0
+  - name: Set g3 to up
+    ios_interface:
+      name: GigabitEthernet3
+      enabled: True
+
+- hosts: CSR1
+  connection: local
+  tasks:
+  - name: Configure OSPF on CSR1
+    ios_command:
+      commands:
+      - conf t
+      - router ospf 10
+      - network 192.168.0.0 0.0.0.255 area 0
+      - network 192.168.51.0 0.0.0.255 area 0
+      - network 192.168.52.0 0.0.0.255 area 0
+      - network 192.168.101.0 0.0.0.255 area 0
+      - network 192.168.102.0 0.0.0.255 area 0
+      - router-id 8.8.8.8
+      - do wr
+
+- hosts: CSR2
+  connection: local
+  tasks:
+  - name: Configure OSPF on CSR2
+    ios_command:
+      commands:
+      - conf t
+      - router ospf 10
+      - router-id 9.9.9.9
+      - network 192.168.0.0 0.0.0.255 area 0
+      - network 192.168.51.0 0.0.0.255 area 0
+      - network 192.168.52.0 0.0.0.255 area 0
+      - network 192.168.101.0 0.0.0.255 area 0
+      - network 192.168.102.0 0.0.0.255 area 0
+      - do wr
+
+
