@@ -1,0 +1,7 @@
+---
+- hosts: web
+  become: yes
+  tasks:
+  - name: Reboot web servers that have been online > 10 minutes
+    reboot:
+    when: ansible_uptime_seconds > 600
