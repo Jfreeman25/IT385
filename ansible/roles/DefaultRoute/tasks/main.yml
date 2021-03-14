@@ -1,0 +1,5 @@
+---
+- name: Configure default route to 192.168.0.250
+  ios_config:
+    lines:
+      - ip route 0.0.0.0 0.0.0.0 192.168.0.250

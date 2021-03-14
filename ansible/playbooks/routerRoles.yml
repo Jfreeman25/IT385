@@ -1,0 +1,9 @@
+---
+- hosts: router
+  connection: local
+  roles:
+  - ../roles/DefaultRoute
+  - ../roles/NTP
+  - ../roles/SNMP
+  - ../roles/LocalPass
+  - ../roles/BackupConfig

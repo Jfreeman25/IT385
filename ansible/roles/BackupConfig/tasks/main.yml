@@ -1,0 +1,19 @@
+---
+- name: Gather facts
+  ios_facts:
+    gather_subset: all
+
+- name: Get current date 
+  local_action: command date +%Y-%m-%d
+  register: date
+
+- name: Get current time
+  local_action: command date +%H:%M
+  register: time
+
+- name: Save backup of running-config
+  ios_config:
+    backup: yes
+    backup_options:
+      filename: "{{ inventory_hostname }}_{{ time.stdout }}.cfg"
+      dir_path: /home/justincase/it385/ansible/playbooks/backups/{{ date.stdout }}

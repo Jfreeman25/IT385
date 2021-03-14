@@ -1,0 +1,7 @@
+---
+- name: Set console password to GRCCon
+  ios_command:
+    commands:
+      - conf t
+      - line con 0
+      - password GRCCon

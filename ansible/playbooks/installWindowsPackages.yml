@@ -1,0 +1,22 @@
+---
+- hosts: WindowsServers
+  tasks:
+  - name: Create user (egoad/RubberDuck!)
+    ansible.windows.win_user:
+      name: egoad
+      password: RubberDuck!
+      state: present
+  - name: Install ISS web server
+    ansible.windows.win_feature:
+      name: Web-Server
+      state: present 
+  - name: Download and install 7-Zip
+    win_chocolatey:
+      name: 7zip
+      state: present
+  - name: Install windows updates
+      win_updates:
+        catagory_names: CriticalUpdates
+        rboot: yes
+              
+
